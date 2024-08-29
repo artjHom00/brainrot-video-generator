@@ -1,0 +1,17 @@
+{
+  "name": "brainrot-video-generator",
+  "version": "1.0.0",
+  "description": "Brainrot 9:16 videos generator using Node, Typescript & FFMpeg",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "puppeteer": "^23.2.1"
+  }
+}

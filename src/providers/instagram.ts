@@ -2,6 +2,10 @@ import puppeteer, { Browser, Page, PuppeteerLaunchOptions } from 'puppeteer';
 import { Post } from './types/post.interface'
 import axios from 'axios';
 
+/*
+ * @class InstagramScraper
+ * @typedef {InstagramScraper}
+ */
 class InstagramScraper {
     protected browser!: Browser; // Use definite assignment assertion
     protected page!: Page;
@@ -9,12 +13,24 @@ class InstagramScraper {
     private initialized: boolean;
     private HOST: string;
 
+    /**
+     * Creates an instance of InstagramScraper.
+     *
+     * @constructor
+     * @param {?PuppeteerLaunchOptions} [puppeteerLaunchOptions]
+     */
     constructor(puppeteerLaunchOptions?: PuppeteerLaunchOptions) {
         this.puppeteerLaunchOptions = puppeteerLaunchOptions
         this.initialized = false;
         this.HOST = 'https://instagram.com'
     }
 
+    /**
+     * @protected
+     * @async
+     * @param {?PuppeteerLaunchOptions} [puppeteerLaunchOptions]
+     * @returns {Promise<void>}
+     */
     protected async initialize(puppeteerLaunchOptions?: PuppeteerLaunchOptions): Promise<void> {
         try {
             this.browser = await puppeteer.launch(puppeteerLaunchOptions);
@@ -27,17 +43,28 @@ class InstagramScraper {
         }
     }
 
+    /**
+     * @private
+     * @param {string} postId
+     * @returns {string}
+     */
     private getInstagramPostJSONUrl(postId: string): string {
         return `${this.HOST}/reel/${postId}/?__a=1&__d=dis`;
     }
 
+    /**
+     * @private
+     * @async
+     * @param {string} userId
+     * @returns {Promise<void>}
+     */
     private async goToUserPage(userId: string): Promise<void> {
         try {
-            if(this.page) {
+            if (this.page) {
                 await this.page.goto(`${this.HOST}/${userId}/reels/`);
-                
+
                 await this.page.waitForNetworkIdle();
-    
+
                 return;
             }
         } catch (e) {
@@ -46,25 +73,31 @@ class InstagramScraper {
         }
     }
 
+    /**
+     * @public
+     * @async
+     * @param {string} userId
+     * @returns {Promise<Post[]>}
+     */
     public async scrapeUsersPosts(userId: string): Promise<Post[]> {
         try {
 
             // Initialize browser asynchronously
-            if(!this.initialized) {
+            if (!this.initialized) {
                 await this.initialize(this.puppeteerLaunchOptions)
             }
-            
+
             await this.goToUserPage(userId);
 
             // getting posts
             let postsIds: string[] = await this.page.evaluate(() => {
                 const allPostsDOM = document.querySelectorAll('._al5p');
                 const postsIds = [];
-                
-                for(let post of allPostsDOM) {
+
+                for (let post of allPostsDOM) {
                     let postId = post.children[0].children[0].getAttribute('href')?.split('/')[2];
 
-                    if(postId) {
+                    if (postId) {
                         postsIds.push(postId)
                     }
                 }
@@ -82,9 +115,15 @@ class InstagramScraper {
         }
     }
 
+    /**
+     * @private
+     * @async
+     * @param {string} postId
+     * @returns {Promise<Post>}
+     */
     private async downloadPost(postId: string): Promise<Post> {
         try {
-            
+
             const requestUrl: string = this.getInstagramPostJSONUrl(postId);
 
             const { data: { graphql: { shortcode_media: postData } } } = await axios.get(requestUrl)
@@ -97,7 +136,7 @@ class InstagramScraper {
                 location: postData.location,
                 video_url: postData.video_url
             }
-            
+
         } catch (e) {
             console.log('downloadPost -> catch', e);
             throw e;
@@ -105,6 +144,11 @@ class InstagramScraper {
     }
 
     // Add a method to close the browser
+    /**
+     * @protected
+     * @async
+     * @returns {Promise<void>}
+     */
     protected async close(): Promise<void> {
         if (this.browser) {
             await this.browser.close();

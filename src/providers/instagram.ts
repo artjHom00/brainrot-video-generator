@@ -1,5 +1,5 @@
 import puppeteer, { Browser, Page, PuppeteerLaunchOptions } from 'puppeteer';
-import { Post } from './types/post.interface'
+import { InstagramPost } from '../types/instagramPost'
 import axios from 'axios';
 
 /*
@@ -7,8 +7,9 @@ import axios from 'axios';
  * @typedef {InstagramScraper}
  */
 class InstagramScraper {
-    protected browser!: Browser; // Use definite assignment assertion
+    protected browser!: Browser;
     protected page!: Page;
+
     private puppeteerLaunchOptions?: PuppeteerLaunchOptions;
     private initialized: boolean;
     private HOST: string;
@@ -77,51 +78,57 @@ class InstagramScraper {
      * @public
      * @async
      * @param {string} userId
-     * @returns {Promise<Post[]>}
+     * @returns {Promise<InstagramPost[]>}
      */
-    public async scrapeUsersPosts(userId: string): Promise<Post[]> {
+    public async scrapeUsersPosts(userId: string, limit?: number): Promise<InstagramPost[]> {
         try {
-
             // Initialize browser asynchronously
             if (!this.initialized) {
-                await this.initialize(this.puppeteerLaunchOptions)
+                await this.initialize(this.puppeteerLaunchOptions);
             }
-
+    
             await this.goToUserPage(userId);
-
-            // getting posts
+    
+            // Getting posts
             let postsIds: string[] = await this.page.evaluate(() => {
                 const allPostsDOM = document.querySelectorAll('._al5p');
                 const postsIds = [];
-
+    
                 for (let post of allPostsDOM) {
                     let postId = post.children[0].children[0].getAttribute('href')?.split('/')[2];
-
+    
                     if (postId) {
-                        postsIds.push(postId)
+                        postsIds.push(postId);
                     }
                 }
-
+    
                 return postsIds;
-            })
-
-            let fullPostsData: Post[] = await Promise.all(postsIds.map((postId) => this.downloadPost(postId)))
-
-            return fullPostsData
-
+            });
+    
+            // If limit is provided, slice the postsIds array to that limit
+            if (limit !== undefined) {
+                postsIds = postsIds.slice(0, limit);
+            }
+    
+            // Downloading post data
+            let fullPostsData: InstagramPost[] = await Promise.all(
+                postsIds.map((postId) => this.downloadPost(postId))
+            );
+    
+            return fullPostsData;
+    
         } catch (e) {
             console.log('scrapeUsersPosts -> catch', e);
             throw e;
         }
     }
-
     /**
      * @private
      * @async
      * @param {string} postId
-     * @returns {Promise<Post>}
+     * @returns {Promise<InstagramPost>}
      */
-    private async downloadPost(postId: string): Promise<Post> {
+    private async downloadPost(postId: string): Promise<InstagramPost> {
         try {
 
             const requestUrl: string = this.getInstagramPostJSONUrl(postId);
@@ -134,7 +141,6 @@ class InstagramScraper {
                 videoUrl: postData.video_url,
                 dimensions: postData.dimensions,
                 location: postData.location,
-                video_url: postData.video_url
             }
 
         } catch (e) {

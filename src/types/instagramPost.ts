@@ -1,4 +1,4 @@
-export interface Post {
+export type InstagramPost = {
     postId: string;
     thumbnailUrl: string;
     videoUrl: string;
@@ -7,5 +7,4 @@ export interface Post {
         height: string;
     }
     location: string;
-    video_url: string;
 }

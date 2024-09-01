@@ -1,21 +1,19 @@
-# Brainrot Shorts Generator
-Brainrot 9:16 YouTube Shorts generator on **Node.js**, **Typescript** & **FFMpeg**.
+# Brainrot Video Generator
+Brainrot 9:16 video generator on **Node.js**, **Typescript** & **FFMpeg**.
 Scraping is done via [**Puppeteer**](https://github.com/puppeteer/puppeteer).
 
 For the examples, go to `/examples` folder.
 ## How it works
-The script scrapes Instagram accounts' reels and generates a new Short by overlaying the scraped reel onto animated background.
+The script scrapes Instagram accounts' reels and generates a new video by overlaying the scraped reel onto animated background.
 
-img
+![Sample Short](./readme.png)
 
 ## Installation
-Install the script using `npm`:
-```bash
-$ npm install brainrot-shorts-generator
-```
+Install the script using `git clone`.
+
 Initialize the `ShortsGenerator` class:
 ```javascript
-let ShortsGenerator = require('brainrot-shorts-generator');
+let ShortsGenerator = require('./dist/index');
 
 let generator = new ShortsGenerator(['inst_accounts'], {
     puppeteerLaunchOptions: {
@@ -95,3 +93,14 @@ $ brew install ffmpeg
 ```bash
 $ sudo apt install ffmpeg
 ```
+
+
+
+---
+
+> This project is intended solely for educational and showcase purposes.
+
+> Fully developed & designed by @artjhom. \
+> [![Twitter URL](https://img.shields.io/twitter/url.svg?label=Follow%20artjhom&style=social&url=https%3A%2F%2Ftwitter.com%2Fartjhom)](https://twitter.com/artjhom)
+
+

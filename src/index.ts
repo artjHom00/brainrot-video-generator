@@ -231,3 +231,10 @@ export default class ShortsGenerator extends InstagramScraper {
     }
 
 }
+
+let generator = new ShortsGenerator(['gaspnstuff'], {
+    puppeteerLaunchOptions: {
+        headless: false
+    },
+    outputDir: __dirname
+})

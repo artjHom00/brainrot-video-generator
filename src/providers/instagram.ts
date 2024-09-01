@@ -120,6 +120,8 @@ class InstagramScraper {
         } catch (e) {
             console.log('scrapeUsersPosts -> catch', e);
             throw e;
+        } finally {
+            this.close()
         }
     }
     /**

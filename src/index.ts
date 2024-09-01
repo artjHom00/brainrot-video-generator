@@ -55,8 +55,6 @@ class ShortsGenerator extends InstagramScraper {
 
             const sourceVideo = options.sourceVideo || (await this.scrapeUsersPosts(account, 1))[0].videoUrl;
             
-            const backgroundVideo = options.backgroundVideo;
-            if(!backgroundVideo) throw new Error('No video provided')
             
             await this.editVideo(sourceVideo, options.backgroundVideo)
 

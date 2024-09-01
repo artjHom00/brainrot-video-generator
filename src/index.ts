@@ -1,6 +1,7 @@
 import InstagramScraper from './providers/instagram';
-import { PuppeteerLaunchOptions } from 'puppeteer';
 import { GenerationOptions } from './types/generationOptions';
+import { ShortsGeneratorOptions } from './types/shortGenerator';
+
 
 import ffmpeg from 'fluent-ffmpeg'
 import ffmpegPath from '@ffmpeg-installer/ffmpeg'
@@ -8,14 +9,10 @@ import ffprobePath from '@ffprobe-installer/ffprobe';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
+import extractUUID from './utils/extractUUID';
 
-interface ShortsGeneratorOptions {
-    outputDir?: string;
-    backgroundVideosDir?: string;
-    puppeteerLaunchOptions?: PuppeteerLaunchOptions;
-}
 
-class ShortsGenerator extends InstagramScraper {
+export default class ShortsGenerator extends InstagramScraper {
     private accountsSource: string[];
     private options: ShortsGeneratorOptions;
 
@@ -54,7 +51,6 @@ class ShortsGenerator extends InstagramScraper {
             let account = options.account || this.getRandomAccount()
 
             const sourceVideo = options.sourceVideo || (await this.scrapeUsersPosts(account, 1))[0].videoUrl;
-            
             
             await this.editVideo(sourceVideo, options.backgroundVideo)
 
@@ -99,13 +95,7 @@ class ShortsGenerator extends InstagramScraper {
 
     private async deleteUnprocessedVideos(outputDir: string, list: string[]): Promise<string[]> {
         try {
-
-            // Helper function to extract UUID from the filename
-            function extractUUID(filename: string): string | null {
-                const match = filename.match(/_([a-f0-9\-]{36})_/);
-                return match ? match[1] : null;
-            }
-
+            
             const files = fs.readdirSync(outputDir)
             const uuid = extractUUID(list[0]) || null
 
@@ -241,5 +231,3 @@ class ShortsGenerator extends InstagramScraper {
     }
 
 }
-
-export default ShortsGenerator

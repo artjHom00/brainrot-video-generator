@@ -6,7 +6,7 @@ import axios from 'axios';
  * @class InstagramScraper
  * @typedef {InstagramScraper}
  */
-class InstagramScraper {
+export class InstagramScraper {
     protected browser!: Browser;
     protected page!: Page;
 
@@ -91,7 +91,7 @@ class InstagramScraper {
     
             // Getting posts
             let postsIds: string[] = await this.page.evaluate(() => {
-                const allPostsDOM = document.querySelectorAll('._al5p');
+                const allPostsDOM: any = document.querySelectorAll('._al5p');
                 const postsIds = [];
     
                 for (let post of allPostsDOM) {

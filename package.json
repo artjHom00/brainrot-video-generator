@@ -1,10 +1,17 @@
 {
-  "name": "brainrot-video-generator",
+  "name": "brainrot-shorts-generator",
   "version": "1.0.0",
-  "description": "Brainrot 9:16 videos generator using Node, Typescript & FFMpeg",
-  "main": "index.js",
+  "description": "Brainrot 9:16 YouTube Shorts generator using Node, Typescript & FFMpeg",
+  "main": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc"
   },
   "author": "",
   "license": "ISC",

@@ -1,6 +1,6 @@
 import InstagramScraper from './providers/instagram';
 import { GenerationOptions } from './types/generationOptions';
-import { ShortsGeneratorOptions } from './types/shortGenerator';
+import { ShortsGeneratorOptions } from './types/shortsGeneratorOptions';
 
 
 import ffmpeg from 'fluent-ffmpeg'

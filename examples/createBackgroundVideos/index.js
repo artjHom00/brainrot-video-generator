@@ -7,7 +7,7 @@ let path = require('path');
         puppeteerLaunchOptions: {
             headless: false
         },
-        outputD
+        outputDir: __dirname
     })
 
     let bgVideo = path.join(__dirname, '/sample-long-background-video.mp4')

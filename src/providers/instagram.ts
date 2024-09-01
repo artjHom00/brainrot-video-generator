@@ -77,17 +77,17 @@ export class InstagramScraper {
     /**
      * @public
      * @async
-     * @param {string} userId
+     * @param {string} account
      * @returns {Promise<InstagramPost[]>}
      */
-    public async scrapeUsersPosts(userId: string, limit?: number): Promise<InstagramPost[]> {
+    public async scrapeUsersPosts(account: string, limit?: number): Promise<InstagramPost[]> {
         try {
             // Initialize browser asynchronously
             if (!this.initialized) {
                 await this.initialize(this.puppeteerLaunchOptions);
             }
     
-            await this.goToUserPage(userId);
+            await this.goToUserPage(account);
     
             // Getting posts
             let postsIds: string[] = await this.page.evaluate(() => {

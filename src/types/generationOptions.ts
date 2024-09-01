@@ -1,4 +1,5 @@
 export type GenerationOptions = {
-    count?: number,
-    account?: string
+    sourceVideo?: string,
+    account?: string,
+    backgroundVideo: string
 }

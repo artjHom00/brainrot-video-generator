@@ -12,10 +12,31 @@ import fs from 'fs';
 import extractUUID from './utils/extractUUID';
 
 
+/**
+ * @export
+ * @class ShortsGenerator
+ * @typedef {ShortsGenerator}
+ * @extends {InstagramScraper}
+ */
 export default class ShortsGenerator extends InstagramScraper {
+    /**
+     * @private
+     * @type {string[]}
+     */
     private accountsSource: string[];
+    /**
+     * @private
+     * @type {ShortsGeneratorOptions}
+     */
     private options: ShortsGeneratorOptions;
 
+    /**
+     * Creates an instance of ShortsGenerator.
+     *
+     * @constructor
+     * @param {string[]} accountsSource
+     * @param {?ShortsGeneratorOptions} [options]
+     */
     constructor(accountsSource: string[], options?: ShortsGeneratorOptions) {
         super(options?.puppeteerLaunchOptions)
 
@@ -37,6 +58,10 @@ export default class ShortsGenerator extends InstagramScraper {
         ffmpeg.setFfprobePath(ffprobePath.path);
     }
 
+    /**
+     * @private
+     * @returns {string}
+     */
     private getRandomAccount(): string {
         if (this.accountsSource.length === 0) {
             throw new Error('accountsSource is empty');
@@ -45,6 +70,12 @@ export default class ShortsGenerator extends InstagramScraper {
         return this.accountsSource[randomIndex];
     }
 
+    /**
+     * @public
+     * @async
+     * @param {GenerationOptions} options
+     * @returns {Promise<void>}
+     */
     public async generateVideo(options: GenerationOptions): Promise<void> {
         try {
 
@@ -60,6 +91,12 @@ export default class ShortsGenerator extends InstagramScraper {
         }
     }
 
+    /**
+     * @private
+     * @async
+     * @param {string} dirPath
+     * @returns {Promise<string>}
+     */
     private async createDirectoryIfNotExists(dirPath: string): Promise<string> {
         try {
 
@@ -77,6 +114,12 @@ export default class ShortsGenerator extends InstagramScraper {
     }
 
 
+    /**
+     * @private
+     * @async
+     * @param {string} filePath
+     * @returns {Promise<string>}
+     */
     private async createFileIfNotExists(filePath: string): Promise<string> {
         try {
 
@@ -93,6 +136,13 @@ export default class ShortsGenerator extends InstagramScraper {
         }
     }
 
+    /**
+     * @private
+     * @async
+     * @param {string} outputDir
+     * @param {string[]} list
+     * @returns {Promise<string[]>}
+     */
     private async deleteUnprocessedVideos(outputDir: string, list: string[]): Promise<string[]> {
         try {
             
@@ -118,6 +168,13 @@ export default class ShortsGenerator extends InstagramScraper {
         }
     }
 
+    /**
+     * @public
+     * @async
+     * @param {string} videoUrl
+     * @param {?number} [limit]
+     * @returns {unknown}
+     */
     public async createBackgroundVideos(videoUrl: string, limit?: number) {
         try {
             const getVideosList = () => {
@@ -183,6 +240,13 @@ export default class ShortsGenerator extends InstagramScraper {
 
 
     // Todo: check if sourceVideo & backgroundVideo should be path / buffer or any.
+    /**
+     * @private
+     * @async
+     * @param {*} sourceVideo
+     * @param {*} backgroundVideo
+     * @returns {Promise<void>}
+     */
     private async editVideo(sourceVideo: any, backgroundVideo: any): Promise<void> {
         try {
             let output = path.join(this.options.outputDir!, `edited_${uuidv4()}.mp4`)
@@ -231,10 +295,3 @@ export default class ShortsGenerator extends InstagramScraper {
     }
 
 }
-
-let generator = new ShortsGenerator(['gaspnstuff'], {
-    puppeteerLaunchOptions: {
-        headless: false
-    },
-    outputDir: __dirname
-})

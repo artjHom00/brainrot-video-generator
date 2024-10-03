@@ -18,7 +18,7 @@ import extractUUID from './utils/extractUUID';
  * @typedef {ShortsGenerator}
  * @extends {InstagramScraper}
  */
-export default class ShortsGenerator extends InstagramScraper {
+module.exports = class ShortsGenerator extends InstagramScraper {
     /**
      * @private
      * @type {string[]}

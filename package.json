@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Brainrot 9:16 video generator using Node, Typescript & FFMpeg",
   "main": "dist/index.js",
-  "type": "module",
   "types": "dist/index.d.ts",
   "files": [
     "dist",

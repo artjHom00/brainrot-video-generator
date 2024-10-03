@@ -9,7 +9,9 @@ The script scrapes Instagram accounts' reels and generates a new video by overla
 ![Sample Short](./readme.png)
 
 ## Installation
-Install the script using `git clone`.
+- Clone the repo using `git clone`.
+- Compile the script using `tsc`
+
 
 Initialize the `ShortsGenerator` class:
 ```javascript
@@ -22,6 +24,7 @@ let generator = new ShortsGenerator(['inst_accounts'], {
     outputDir: __dirname
 })
 ```
+> Check the ./examples folder for examples
 
 ## Usage
 
